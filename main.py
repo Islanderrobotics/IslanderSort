@@ -1,0 +1,66 @@
+import math
+from itertools import compress
+'''this class will allow the dev the ability to sort data with merge sort when the data 
+has more then one piece of data paired to it'''
+
+# if you didnt want to use Islander_sort you could just use the sort() method
+class IslanderSort:
+	def __init__(self, number_list, string_list = None):
+		if string_list is None:
+			self.data = number_list
+			self.both = False
+		else:
+			self.data = list(zip(number_list,string_list))
+			self.both = True
+
+		self.string = []
+		self.number = []
+
+	def merging(self, left,right):
+		"""this is will combine the two list"""
+		new_list = []
+		while (min(len(left),len(right))):
+			if (left[0]>right[0]):
+				to_insert = right.pop(0)
+				new_list.append(to_insert)
+			elif(left[0]<=right[0]):
+				to_insert = left.pop(0)
+				new_list.append(to_insert)
+		if (len(left)>0):
+			for i in left:
+				new_list.append(i)
+		if (len(right)>0):
+			for i in right:
+				new_list.append(i)
+		return(new_list)
+
+	def MergeSort(self,data):
+		"""this is where the recursive decsions will happen"""
+		new_list = []
+		if (len(data)==1):
+			new_list = data
+		else:
+			left = self.MergeSort(data[:math.floor(len(data)/2)])
+			right = self.MergeSort(data[math.floor(len(data)/2):])
+			new_list = self.merging(left, right)
+
+		return (new_list)
+
+	def split(self):
+		if (self.both):
+			for i in range(len(self.data)):
+				self.string.append(self.data[i][1])
+				self.number.append(self.data[i][0])
+
+		else:
+			for i in self.data:
+				self.number.append(i)
+
+	def drive(self):
+		self.data = self.MergeSort(self.data)
+		self.split()
+if __name__ == '__main__':
+    array = [3,2,8,3,6,1,5]
+    new_list = IslanderSort(array)
+    new_list.drive()
+    print(new_list.number)
